@@ -1,0 +1,6 @@
+[submodule "Distiller"]
+	path = Distiller
+	url = https://github.com/YaccConstructor/Distiller
+[submodule "grin"]
+	path = grin
+	url = https://github.com/grin-compiler/grin
