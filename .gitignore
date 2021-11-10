@@ -29,3 +29,5 @@ tags
 .hspec-failures
 better-cache/
 stack*.yaml.lock
+
+inputs/

@@ -21,6 +21,11 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- distiller
+- containers
+- grin
+- mtl
+- transformers
 
 
 library:
@@ -37,6 +42,7 @@ executables:
     dependencies:
     - poitin-grin-frontend
     - distiller
+    - grin
 
 tests:
   poitin-grin-frontend-test:
@@ -49,3 +55,4 @@ tests:
     dependencies:
     - poitin-grin-frontend
     - distiller
+    - grin
