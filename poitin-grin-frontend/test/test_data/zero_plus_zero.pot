@@ -1,0 +1,7 @@
+main = let i = 0 in
+        let j = 0 in
+          plus j i;
+
+plus x y = case x of
+              Zero    -> y
+            | Succ(n) -> Succ(plus n y)

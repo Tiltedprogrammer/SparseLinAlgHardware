@@ -9,9 +9,8 @@ version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/Frontend#readme>
 homepage:       https://github.com/githubuser/Frontend#readme
 bug-reports:    https://github.com/githubuser/Frontend/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2021 Author name here
+author:         Aleksey Tyurin
+maintainer:     alekseytyurinspb@gmail.com
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
@@ -26,12 +25,24 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Transformations.Transformations
   other-modules:
       Paths_poitin_grin_frontend
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      MissingH
+    , base >=4.7 && <5
+    , containers
+    , distiller
+    , grin
+    , megaparsec
+    , mtl
+    , tasty
+    , tasty-hspec
+    , tasty-hunit
+    , text
+    , transformers
   default-language: Haskell2010
 
 executable poitin-grin-frontend-exe
@@ -42,9 +53,19 @@ executable poitin-grin-frontend-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      MissingH
+    , base >=4.7 && <5
+    , containers
     , distiller
+    , grin
+    , megaparsec
+    , mtl
     , poitin-grin-frontend
+    , tasty
+    , tasty-hspec
+    , tasty-hunit
+    , text
+    , transformers
   default-language: Haskell2010
 
 test-suite poitin-grin-frontend-test
@@ -56,7 +77,17 @@ test-suite poitin-grin-frontend-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      MissingH
+    , base >=4.7 && <5
+    , containers
     , distiller
+    , grin
+    , megaparsec
+    , mtl
     , poitin-grin-frontend
+    , tasty
+    , tasty-hspec
+    , tasty-hunit
+    , text
+    , transformers
   default-language: Haskell2010

@@ -1,0 +1,13 @@
+main = let i = 0 in
+        let j = 1 in
+         let k = mul in
+          let f = \x y -> (let v = (plus x y) in k v i)
+            in f 1 2;
+
+plus x y = case x of
+              Zero    -> y
+            | Succ(x) -> Succ(plus x y);
+
+mul x y = case x of
+             Zero    -> Zero
+           | Succ(x) -> plus y (mul x y)

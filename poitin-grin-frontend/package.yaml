@@ -2,9 +2,8 @@ name:                poitin-grin-frontend
 version:             0.1.0.0
 github:              "githubuser/Frontend"
 license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+author:              "Aleksey Tyurin"
+maintainer:          "alekseytyurinspb@gmail.com"
 
 extra-source-files:
 - README.md
@@ -26,10 +25,18 @@ dependencies:
 - grin
 - mtl
 - transformers
-
+- MissingH
+- megaparsec
+- text
+- tasty
+- tasty-hunit
+- tasty-hspec
 
 library:
   source-dirs: src
+  dependencies:
+    - distiller
+    - grin
 
 executables:
   poitin-grin-frontend-exe:
@@ -41,9 +48,6 @@ executables:
     - -with-rtsopts=-N
     dependencies:
     - poitin-grin-frontend
-    - distiller
-    - grin
-
 tests:
   poitin-grin-frontend-test:
     main:                Spec.hs
@@ -54,5 +58,6 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - poitin-grin-frontend
-    - distiller
-    - grin
+    - tasty
+    - tasty-hunit
+    - tasty-hspec
