@@ -1,0 +1,42 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  runhaskell:
+    name: Run tests with coverage
+    runs-on: ubuntu-latest # or macOS-latest, or windows-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Install llvm-dev
+        run: sudo apt-get install llvm-7-dev 
+
+      - uses: haskell/actions/setup@v1
+        with:
+          ghc-version: '8.8.3' # Exact version of ghc to use
+          # cabal-version: 'latest'. Omitted, but defaults to 'latest'
+          enable-stack: true
+          stack-version: 'latest'
+      - run: stack test poitin-grin-frontend --coverage
+      - name: Generate coverage report
+        uses: 8c6794b6/hpc-codecov-action@v2
+        with:
+          target: stack:poitin-grin-frontend-test
+          
+      - name: Send coverage report
+        uses: codecov/codecov-action@v2
