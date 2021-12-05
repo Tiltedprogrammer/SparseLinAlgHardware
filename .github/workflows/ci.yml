@@ -33,3 +33,9 @@ jobs:
           enable-stack: true
           stack-version: 'latest'
       - run: stack test poitin-grin-frontend --coverage
+      - name: Generate coverage report
+        uses: 8c6794b6/hpc-codecov-action@v2
+        with:
+          target: stack:poitin-grin-frontend
+          root: ./poitin-grin-frontend/
+          out: poitin-grin-frontend-cov.json
