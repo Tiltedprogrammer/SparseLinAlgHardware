@@ -34,4 +34,9 @@ jobs:
           stack-version: 'latest'
       - run: stack test poitin-grin-frontend --coverage
       - name: Generate coverage report
-        run: "stack install hpc-codecov && hpc-codecov -o cov.json stack:poitin-grin-frontend-test && cat cov.json" 
+        uses: 8c6794b6/hpc-codecov-action@v2
+        with:
+          target: stack:poitin-grin-frontend-test
+          
+      - name: Send coverage report
+        uses: codecov/codecov-action@v1
