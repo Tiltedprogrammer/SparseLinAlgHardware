@@ -24,7 +24,7 @@ jobs:
         with:
           submodules: recursive
       - name: Install llvm-dev
-        run: apt-get install llvm-7-dev 
+        run: sudo apt-get install llvm-7-dev 
 
       - uses: haskell/actions/setup@v1
         with:
