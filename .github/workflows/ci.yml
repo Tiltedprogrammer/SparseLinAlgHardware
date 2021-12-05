@@ -29,4 +29,4 @@ jobs:
           # cabal-version: 'latest'. Omitted, but defaults to 'latest'
           enable-stack: true
           stack-version: 'latest'
-      - run: test poitin-grin-frontend --coverage
+      - run: stack test poitin-grin-frontend --coverage
