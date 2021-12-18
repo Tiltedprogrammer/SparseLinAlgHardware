@@ -1,0 +1,55 @@
+main = let r = mAdd (eqNat 0) (plus) q1 q2 in
+                eqNat (fold (\x y -> mul x y) 1 r) (1);
+
+q1 = Node(Node(Val(1),Val(1),Val(1),Val(1)),None,None,Node(Val(1),Val(1),Val(1),Val(1)));
+
+q2 = Node(None, Node(Val(1),Val(1),Val(1),Val(1)), Node(Val(1),Val(1),Val(1),Val(1)),None);
+
+
+
+eqNat x y = case x of
+               Zero -> (case y of
+                           Zero -> True
+                         | Succ(y) -> False)
+             | Succ(x) -> case y of
+                             Zero -> False
+                           | Succ(y) -> eqNat x y;
+
+plus x y = case x of
+              Zero    -> y
+            | Succ(x) -> Succ(plus x y);
+
+mkNode isZ x = case (isZ x) of True -> None | False -> Val(x); 
+
+reduceTree n1 n2 n3 n4 = Node (n1, n2, n3, n4);
+
+mul x y = case x of
+             Zero    -> Zero
+           | Succ(x) -> plus y (mul x y);
+
+mAdd isZ g m1 m2 = 
+    case m1 of
+         Error -> Error
+         | None -> (m2)
+         | Val (v1) -> (case m2 of 
+                        Error -> Error 
+                        | None -> m1 
+                        | Val (v) -> (mkNode isZ (g v1 v))
+                        | Node (t1, t2, t3, t4) -> Error)
+         | Node (q1, q2, q3, q4) -> (case m2 of 
+                                    Error -> Error
+                                    | None -> m1 
+                                    | Val (v) -> Error 
+                                    | Node (t1, t2, t3, t4) -> (reduceTree 
+                                                                    (mAdd isZ g q1 t1) 
+                                                                    (mAdd isZ g q2 t2) 
+                                                                    (mAdd isZ g q3 t3) 
+                                                                    (mAdd isZ g q4 t4)));
+
+fold f s m =
+     case m of
+       None -> s
+     | Error -> s
+     | Val(v) -> (f s v)
+     | Node (n1, n2, n3, n4) -> (fold f (fold f (fold f (fold f s n1) n2) n3) n4)
+ 

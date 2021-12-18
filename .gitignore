@@ -31,3 +31,5 @@ better-cache/
 stack*.yaml.lock
 
 inputs/
+.grin-output
+.output

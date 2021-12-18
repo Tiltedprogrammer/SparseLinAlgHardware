@@ -16,11 +16,26 @@ import qualified Text.Megaparsec.Char as M
 import Grin.Parse
 
 import Pipeline.Eval
+import Reducer.Pure
+import Reducer.PrimOps
+import Pipeline.Pipeline
 import System.Environment
 
 
 prog :: G.Program
 prog =  G.Program [] [G.Def (G.NM {G.unNM="grinMain"}) [] (G.SApp (G.NM {G.unNM = "fun"}) [(G.Var (G.NM {G.unNM = "arg"}))])] 
+
+
+opts = defaultOpts
+                    { _poOutputDir = ".grin-output"
+                    , _poFailOnLint = False
+                    , _poLogging = False
+                    , _poSaveBinary = False
+                    , _poCFiles = []
+                    }
+evalGrin prog = optimize opts prog [] [] >>= evalProgram  (PureReducer (EvalPlugin evalPrimOp))
+-- evalGrin prog = pipeline opts Nothing  prog [] >>= evalProgram  (PureReducer (EvalPlugin evalPrimOp))
+
 
 main :: IO ()
 main = do
@@ -30,8 +45,8 @@ main = do
         Nothing -> putStrLn ""
         Just p' -> do
             let (poitin, grin) = transformP p'
-            putStrLn . showProg $ poitin
             printGrin grin
-            (res, _) <- evalProgram IOReducer grin
-            print res
+            -- printGrin grinOpt
+            -- (res, _) <- evalGrin grin
+            -- print res
 

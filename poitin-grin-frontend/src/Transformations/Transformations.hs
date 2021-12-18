@@ -45,7 +45,7 @@ runPass pass = do
 transformP :: Prog -> (Prog, G.Program)
 transformP p@(main', defs') = let
                                   supplier = [replicate k ['a'..'z'] | k <- [1..]] >>= sequence
-                                  freeVars' = reserved' `Set.intersection` Set.fromList ("main" : map (\x@(name,(args,body)) -> name) defs')
+                                  freeVars' = reserved' `Set.union` Set.fromList ("main" : map (\x@(name,(args,body)) -> name) defs')
                                   defs'' = (("main", ([], main')) : defs')
                                   env = Env {defs = defs'', freeVars = freeVars', uniqueSupplier = supplier }
 
@@ -63,7 +63,7 @@ transformP p@(main', defs') = let
 
 
 reserved' :: Set.Set String
-reserved' = Set.fromList ["ap","f","a","t","eval","apply","q","v","grinMain","m","result"]
+reserved' = Set.fromList ["ap","f","a","t","eval","apply","q","v","grinMain","m","result","w"]
 -- need to know ord of every fun (this is in defs)
 data GrinEnv = GrinEnv {
               defsG ::  [(String, ([String],Term))],
@@ -113,10 +113,19 @@ grinify env@(Env defs freeVars uniqueSupplier) =
             (applyGAlts, s'') = runState (mapM grinifyApply defsG') s'
 
             apGAlt = G.Alt
-            evalGAlts' =  concat evalGAlts ++ map (\(tag, body@(args, exp)) -> G.Alt (G.NodePat tag args) exp) (Map.toList $ evalG s)
-            applyGAlts' = concat applyGAlts ++ map (\(tag, body@(args, exp)) -> G.Alt (G.NodePat tag args) exp) (Map.toList $ applyG s)
+            evalGAlts' =  concat evalGAlts ++ map (\(tag, body@(args, exp)) -> G.Alt (G.NodePat tag args) exp) (Map.toList $ evalG s'')
+            applyGAlts' = concat applyGAlts ++ map (\(tag, body@(args, exp)) -> G.Alt (G.NodePat tag args) exp) (Map.toList $ applyG s'')
 
-            evalG' = G.Def (G.NM {G.unNM="eval"}) [G.NM {G.unNM="q"}] (G.EBind (G.SFetchI (G.NM {G.unNM="q"}) Nothing) (G.Var G.NM{G.unNM="v"}) (G.ECase (G.Var G.NM {G.unNM="v"}) evalGAlts'))
+            evalG' = G.Def (G.NM {G.unNM="eval"}) [G.NM {G.unNM="q"}]     
+                        (G.EBind (G.SFetchI (G.NM {G.unNM="q"}) Nothing) 
+                                 (G.Var G.NM{G.unNM="v"}) 
+                                 (G.EBind 
+                                    (G.ECase (G.Var G.NM {G.unNM="v"}) evalGAlts')
+                                    (G.Var G.NM {G.unNM="w"}) 
+                                    (G.EBind  (G.SUpdate (G.NM {G.unNM="q"}) (G.Var (G.NM {G.unNM="w"}))) 
+                                            G.Unit 
+                                            (G.SReturn (G.Var G.NM {G.unNM="w"}))))
+                        )
             applyG' = G.Def (G.NM {G.unNM="apply"}) [G.NM {G.unNM="f'"}, G.NM {G.unNM="a''"}] (G.ECase (G.Var G.NM {G.unNM="f'"}) applyGAlts')
 
             grinMainBody = G.EBind (G.SApp (G.NM {G.unNM="main"}) []) (G.Var (G.NM {G.unNM="m"}))
@@ -151,15 +160,17 @@ grinifyEval x@(G.Def name args body) = do
     GrinEnv {defsG, freeVarsG, uniqueSupplierG, bindingsG, evalG, applyG} <- get
     let (args', freeVarsG', uniqueSupplierG') = foldl (\(acc,f,u) _ -> let (name',uniqueSupplierG') = getNewName "pat" f u in
                                             (name' : acc, Set.insert name' f, uniqueSupplierG')) ([], freeVarsG, uniqueSupplierG) args
-        (resultName, uniqueSupplierG'') = getNewName "z" freeVarsG' uniqueSupplierG'
-        freeVarsG'' = Set.insert resultName freeVarsG'
+        -- (resultName, uniqueSupplierG'') = getNewName "z" freeVarsG' uniqueSupplierG'
+        -- freeVarsG'' = Set.insert resultName freeVarsG'
         alt = G.Alt (G.NodePat (G.Tag G.F name)
                         (map (\a -> G.NM {G.unNM=T.pack  a}) args'))
-                        (G.EBind (G.SApp name (map (\a -> G.Var $ G.NM {G.unNM=T.pack  a}) args'))
-                                 (G.Var G.NM {G.unNM=T.pack resultName})
-                                 (G.EBind (G.SUpdate (G.NM {G.unNM="q"}) (G.Var (G.NM {G.unNM = T.pack resultName}))) G.Unit (G.SReturn (G.Var (G.NM {G.unNM=T.pack resultName})))))
+                        (G.SApp name (map (\a -> G.Var $ G.NM {G.unNM=T.pack  a}) args'))
+                                 
+                        -- (G.EBind (G.SApp name (map (\a -> G.Var $ G.NM {G.unNM=T.pack  a}) args'))
+                        --          (G.Var G.NM {G.unNM=T.pack resultName})
+                        --          (G.EBind (G.SUpdate (G.NM {G.unNM="q"}) (G.Var (G.NM {G.unNM = T.pack resultName}))) G.Unit (G.SReturn (G.Var (G.NM {G.unNM=T.pack resultName})))))
     -- generate all partiall applied evals
-    put (GrinEnv {defsG=defsG, freeVarsG=freeVarsG'', uniqueSupplierG=uniqueSupplierG'',bindingsG=bindingsG, evalG=evalG, applyG=applyG})
+    put (GrinEnv {defsG=defsG, freeVarsG=freeVarsG', uniqueSupplierG=uniqueSupplierG',bindingsG=bindingsG, evalG=evalG, applyG=applyG})
     alts <- mapM (\i -> do
             GrinEnv {defsG, freeVarsG, uniqueSupplierG, bindingsG, evalG, applyG} <- get
             let (name',uniqueSupplierG') = getNewName "patP" freeVarsG uniqueSupplierG
@@ -254,7 +265,7 @@ grinifyHelper t rule = do
                 altBodyEval = G.SReturn (G.ConstTagNode conTag  (map (\x -> G.Var (G.NM {G.unNM = T.pack x})) argsEval'))
                 entryEval = (map (\x -> G.NM {G.unNM=T.pack x}) argsEval', altBodyEval)
 
-            put (GrinEnv {defsG=defsG, bindingsG=bindingsG, freeVarsG=freeEval',uniqueSupplierG=uniqueSupplierEval',evalG=Map.insert conTag entryEval evalG,applyG=Map.insert conTag entryApply applyG})
+            put (GrinEnv {defsG=defsG, bindingsG=bindingsG, freeVarsG=freeEval',uniqueSupplierG=uniqueSupplierEval',evalG=  Map.insert conTag entryEval evalG,applyG=Map.insert conTag entryApply applyG})
 
             case rule of
                 Strict -> return (G.SReturn (G.ConstTagNode
@@ -272,31 +283,38 @@ grinifyHelper t rule = do
             put (GrinEnv {defsG=defsG, bindingsG=bindingsG,freeVarsG=Set.insert name freeVarsG, uniqueSupplierG=uniqueSupplierG',evalG=evalG, applyG=applyG})
 
             GrinEnv {defsG, freeVarsG, uniqueSupplierG, bindingsG, evalG, applyG} <- get
+
             let oldBindings = bindingsG
 
             alts <- mapM (\b@(cname, cargs, body) -> do
                 let newBindings = foldl (\acc (i,arg) -> Map.insert i arg acc) (Map.mapKeys (+ length cargs) bindingsG) (zip (reverse [0 .. length cargs - 1]) cargs)
-            
+
+                GrinEnv {defsG, freeVarsG, uniqueSupplierG, bindingsG, evalG, applyG} <- get
                 put (GrinEnv {defsG=defsG, bindingsG=newBindings, freeVarsG=freeVarsG, uniqueSupplierG=uniqueSupplierG, evalG=evalG, applyG=applyG})
 
                 body' <- grinifyHelper body Strict
 
                 let alt = G.Alt (G.NodePat (G.Tag G.C (G.NM {G.unNM=T.pack cname})) (map (\x -> G.NM {G.unNM=T.pack x}) cargs))
                 return $ alt body') branches
-            
+
             GrinEnv {defsG, freeVarsG, uniqueSupplierG, bindingsG, evalG, applyG} <- get
             put (GrinEnv {defsG=defsG, bindingsG=oldBindings, freeVarsG=freeVarsG, uniqueSupplierG=uniqueSupplierG, evalG=evalG, applyG=applyG})
 
             let e = G.EBind evalI (G.Var (G.NM {G.unNM=T.pack name})) (G.ECase (G.Var (G.NM {G.unNM=T.pack name})) alts)
-            
+
             return e
 
         -- pay attention to the case when fun has no arguments but then it cannot be inside apply
         Fun name -> do
             let (Just (args, _)) = lookup name defsG
-            case rule of
-                NonStrict -> return (G.SStore (G.ConstTagNode (G.Tag (G.P (length args)) (G.NM {G.unNM =T.pack name})) []))
-                Strict -> return (G.SReturn (G.ConstTagNode (G.Tag (G.P (length args)) (G.NM {G.unNM =T.pack name})) []))
+            if length args == 0 then
+               case rule of
+                    NonStrict -> return (G.SStore (G.ConstTagNode (G.Tag G.F (G.NM {G.unNM =T.pack name})) []))
+                    Strict -> return (G.SReturn (G.ConstTagNode (G.Tag G.F (G.NM {G.unNM =T.pack name})) []))
+            else
+                case rule of
+                    NonStrict -> return (G.SStore (G.ConstTagNode (G.Tag (G.P (length args)) (G.NM {G.unNM =T.pack name})) []))
+                    Strict -> return (G.SReturn (G.ConstTagNode (G.Tag (G.P (length args)) (G.NM {G.unNM =T.pack name})) []))
         (Bound i) -> do
             let (Just nameI) = Map.lookup i bindingsG
             case rule of

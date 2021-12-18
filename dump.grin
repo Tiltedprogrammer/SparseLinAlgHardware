@@ -1,0 +1,1053 @@
+grinMain =
+  m <- main $
+  pure m
+
+fun arg_oi arg_gt_oh =
+  var_gk <- do
+    var_gl <- do
+      store (P2mul)
+    var_gm <- do
+      pure arg_oi
+    var_od <- do
+      pure var_gl
+    var_oe <- do
+      pure var_gm
+    store (Fap var_od var_oe)
+  var_gn <- do
+    pure arg_gt_oh
+  var_of <- do
+    pure var_gk
+  var_og <- do
+    pure var_gn
+  ap $ var_of var_og
+
+fun_gv arg_gu_oj =
+  var_ob <- do
+    store (P2fun)
+  var_oc <- do
+    pure arg_gu_oj
+  ap $ var_ob var_oc
+
+main =
+  r <- do
+    var_ft <- do
+      var_fu <- do
+        var_fv <- do
+          var_fw <- do
+            store (P4mAdd)
+          var_fx <- do
+            var_fy <- do
+              store (P2eqNat)
+            var_fz <- do
+              store (CZero)
+            var_nf <- do
+              pure var_fy
+            var_ng <- do
+              pure var_fz
+            store (Fap var_nf var_ng)
+          var_nh <- do
+            pure var_fw
+          var_ni <- do
+            pure var_fx
+          store (Fap var_nh var_ni)
+        var_ga <- do
+          store (P2plus)
+        var_nj <- do
+          pure var_fv
+        var_nk <- do
+          pure var_ga
+        store (Fap var_nj var_nk)
+      var_gb <- do
+        store (Fq1)
+      var_nl <- do
+        pure var_fu
+      var_nm <- do
+        pure var_gb
+      store (Fap var_nl var_nm)
+    var_gc <- do
+      store (Fq2)
+    var_nn <- do
+      pure var_ft
+    var_no <- do
+      pure var_gc
+    store (Fap var_nn var_no)
+  var_gd <- do
+    var_ge <- do
+      store (P2eqNat)
+    var_gf <- do
+      var_gg <- do
+        var_gh <- do
+          var_gi <- do
+            store (P3fold)
+          var_gj <- do
+            store (P1fun_gv)
+          var_np <- do
+            pure var_gi
+          var_nq <- do
+            pure var_gj
+          store (Fap var_np var_nq)
+        var_go <- do
+          c_bind_gp <- do
+            store (CZero)
+          c_bind_nr <- do
+            pure c_bind_gp
+          store (CSucc c_bind_nr)
+        var_ns <- do
+          pure var_gh
+        var_nt <- do
+          pure var_go
+        store (Fap var_ns var_nt)
+      var_gq <- do
+        pure r
+      var_nu <- do
+        pure var_gg
+      var_nv <- do
+        pure var_gq
+      store (Fap var_nu var_nv)
+    var_nw <- do
+      pure var_ge
+    var_nx <- do
+      pure var_gf
+    store (Fap var_nw var_nx)
+  var_gr <- do
+    c_bind_gs <- do
+      store (CZero)
+    c_bind_ny <- do
+      pure c_bind_gs
+    store (CSucc c_bind_ny)
+  var_nz <- do
+    pure var_gd
+  var_oa <- do
+    pure var_gr
+  ap $ var_nz var_oa
+
+q1 =
+  c_bind_fp <- do
+    c_bind_ez <- do
+      c_bind_es <- do
+        c_bind_er <- do
+          store (CZero)
+        c_bind_md <- do
+          pure c_bind_er
+        store (CSucc c_bind_md)
+      c_bind_me <- do
+        pure c_bind_es
+      store (CVal c_bind_me)
+    c_bind_fa <- do
+      c_bind_eu <- do
+        c_bind_et <- do
+          store (CZero)
+        c_bind_mf <- do
+          pure c_bind_et
+        store (CSucc c_bind_mf)
+      c_bind_mg <- do
+        pure c_bind_eu
+      store (CVal c_bind_mg)
+    c_bind_fb <- do
+      c_bind_ew <- do
+        c_bind_ev <- do
+          store (CZero)
+        c_bind_mh <- do
+          pure c_bind_ev
+        store (CSucc c_bind_mh)
+      c_bind_mi <- do
+        pure c_bind_ew
+      store (CVal c_bind_mi)
+    c_bind_fc <- do
+      c_bind_ey <- do
+        c_bind_ex <- do
+          store (CZero)
+        c_bind_mj <- do
+          pure c_bind_ex
+        store (CSucc c_bind_mj)
+      c_bind_mk <- do
+        pure c_bind_ey
+      store (CVal c_bind_mk)
+    c_bind_ml <- do
+      pure c_bind_ez
+    c_bind_mm <- do
+      pure c_bind_fa
+    c_bind_mn <- do
+      pure c_bind_fb
+    c_bind_mo <- do
+      pure c_bind_fc
+    store (CNode c_bind_ml c_bind_mm c_bind_mn c_bind_mo)
+  c_bind_fq <- do
+    store (CNone)
+  c_bind_fr <- do
+    store (CNone)
+  c_bind_fs <- do
+    c_bind_fl <- do
+      c_bind_fe <- do
+        c_bind_fd <- do
+          store (CZero)
+        c_bind_mp <- do
+          pure c_bind_fd
+        store (CSucc c_bind_mp)
+      c_bind_mq <- do
+        pure c_bind_fe
+      store (CVal c_bind_mq)
+    c_bind_fm <- do
+      c_bind_fg <- do
+        c_bind_ff <- do
+          store (CZero)
+        c_bind_mr <- do
+          pure c_bind_ff
+        store (CSucc c_bind_mr)
+      c_bind_ms <- do
+        pure c_bind_fg
+      store (CVal c_bind_ms)
+    c_bind_fn <- do
+      c_bind_fi <- do
+        c_bind_fh <- do
+          store (CZero)
+        c_bind_mt <- do
+          pure c_bind_fh
+        store (CSucc c_bind_mt)
+      c_bind_mu <- do
+        pure c_bind_fi
+      store (CVal c_bind_mu)
+    c_bind_fo <- do
+      c_bind_fk <- do
+        c_bind_fj <- do
+          store (CZero)
+        c_bind_mv <- do
+          pure c_bind_fj
+        store (CSucc c_bind_mv)
+      c_bind_mw <- do
+        pure c_bind_fk
+      store (CVal c_bind_mw)
+    c_bind_mx <- do
+      pure c_bind_fl
+    c_bind_my <- do
+      pure c_bind_fm
+    c_bind_mz <- do
+      pure c_bind_fn
+    c_bind_na <- do
+      pure c_bind_fo
+    store (CNode c_bind_mx c_bind_my c_bind_mz c_bind_na)
+  c_bind_nb <- do
+    pure c_bind_fp
+  c_bind_nc <- do
+    pure c_bind_fq
+  c_bind_nd <- do
+    pure c_bind_fr
+  c_bind_ne <- do
+    pure c_bind_fs
+  pure (CNode c_bind_nb c_bind_nc c_bind_nd c_bind_ne)
+
+q2 =
+  c_bind_en <- do
+    store (CNone)
+  c_bind_eo <- do
+    c_bind_dx <- do
+      c_bind_dq <- do
+        c_bind_dp <- do
+          store (CZero)
+        c_bind_lb <- do
+          pure c_bind_dp
+        store (CSucc c_bind_lb)
+      c_bind_lc <- do
+        pure c_bind_dq
+      store (CVal c_bind_lc)
+    c_bind_dy <- do
+      c_bind_ds <- do
+        c_bind_dr <- do
+          store (CZero)
+        c_bind_ld <- do
+          pure c_bind_dr
+        store (CSucc c_bind_ld)
+      c_bind_le <- do
+        pure c_bind_ds
+      store (CVal c_bind_le)
+    c_bind_dz <- do
+      c_bind_du <- do
+        c_bind_dt <- do
+          store (CZero)
+        c_bind_lf <- do
+          pure c_bind_dt
+        store (CSucc c_bind_lf)
+      c_bind_lg <- do
+        pure c_bind_du
+      store (CVal c_bind_lg)
+    c_bind_ea <- do
+      c_bind_dw <- do
+        c_bind_dv <- do
+          store (CZero)
+        c_bind_lh <- do
+          pure c_bind_dv
+        store (CSucc c_bind_lh)
+      c_bind_li <- do
+        pure c_bind_dw
+      store (CVal c_bind_li)
+    c_bind_lj <- do
+      pure c_bind_dx
+    c_bind_lk <- do
+      pure c_bind_dy
+    c_bind_ll <- do
+      pure c_bind_dz
+    c_bind_lm <- do
+      pure c_bind_ea
+    store (CNode c_bind_lj c_bind_lk c_bind_ll c_bind_lm)
+  c_bind_ep <- do
+    c_bind_ej <- do
+      c_bind_ec <- do
+        c_bind_eb <- do
+          store (CZero)
+        c_bind_ln <- do
+          pure c_bind_eb
+        store (CSucc c_bind_ln)
+      c_bind_lo <- do
+        pure c_bind_ec
+      store (CVal c_bind_lo)
+    c_bind_ek <- do
+      c_bind_ee <- do
+        c_bind_ed <- do
+          store (CZero)
+        c_bind_lp <- do
+          pure c_bind_ed
+        store (CSucc c_bind_lp)
+      c_bind_lq <- do
+        pure c_bind_ee
+      store (CVal c_bind_lq)
+    c_bind_el <- do
+      c_bind_eg <- do
+        c_bind_ef <- do
+          store (CZero)
+        c_bind_lr <- do
+          pure c_bind_ef
+        store (CSucc c_bind_lr)
+      c_bind_ls <- do
+        pure c_bind_eg
+      store (CVal c_bind_ls)
+    c_bind_em <- do
+      c_bind_ei <- do
+        c_bind_eh <- do
+          store (CZero)
+        c_bind_lt <- do
+          pure c_bind_eh
+        store (CSucc c_bind_lt)
+      c_bind_lu <- do
+        pure c_bind_ei
+      store (CVal c_bind_lu)
+    c_bind_lv <- do
+      pure c_bind_ej
+    c_bind_lw <- do
+      pure c_bind_ek
+    c_bind_lx <- do
+      pure c_bind_el
+    c_bind_ly <- do
+      pure c_bind_em
+    store (CNode c_bind_lv c_bind_lw c_bind_lx c_bind_ly)
+  c_bind_eq <- do
+    store (CNone)
+  c_bind_lz <- do
+    pure c_bind_en
+  c_bind_ma <- do
+    pure c_bind_eo
+  c_bind_mb <- do
+    pure c_bind_ep
+  c_bind_mc <- do
+    pure c_bind_eq
+  pure (CNode c_bind_lz c_bind_ma c_bind_mb c_bind_mc)
+
+eqNat x_sx y_sw =
+  scrut_di <- do
+    pure x_sx
+  scrut_ku <- do
+    pure scrut_di
+  z <- eval $ scrut_ku
+  case z of
+    (CZero) ->
+      scrut_dj <- do
+        pure y_sw
+      scrut_kv <- do
+        pure scrut_dj
+      z_sy <- eval $ scrut_kv
+      case z_sy of
+        (CZero) ->
+          pure (CTrue)
+        (CSucc y) ->
+          pure (CFalse)
+    (CSucc x) ->
+      scrut_dk <- do
+        pure y_sw
+      scrut_kw <- do
+        pure scrut_dk
+      z_sz <- eval $ scrut_kw
+      case z_sz of
+        (CZero) ->
+          pure (CFalse)
+        (CSucc y_a) ->
+          var_dl <- do
+            var_dm <- do
+              store (P2eqNat)
+            var_dn <- do
+              pure x
+            var_kx <- do
+              pure var_dm
+            var_ky <- do
+              pure var_dn
+            store (Fap var_kx var_ky)
+          var_do <- do
+            pure y_a
+          var_kz <- do
+            pure var_dl
+          var_la <- do
+            pure var_do
+          ap $ var_kz var_la
+
+plus x_tb y_ta =
+  scrut_dc <- do
+    pure x_tb
+  scrut_ko <- do
+    pure scrut_dc
+  z_tc <- eval $ scrut_ko
+  case z_tc of
+    (CZero) ->
+      ret <- eval $ y_ta
+      pure ret
+    (CSucc x_b) ->
+      c_bind_dh <- do
+        var_dd <- do
+          var_de <- do
+            store (P2plus)
+          var_df <- do
+            pure x_b
+          var_kp <- do
+            pure var_de
+          var_kq <- do
+            pure var_df
+          store (Fap var_kp var_kq)
+        var_dg <- do
+          pure y_ta
+        var_kr <- do
+          pure var_dd
+        var_ks <- do
+          pure var_dg
+        store (Fap var_kr var_ks)
+      c_bind_kt <- do
+        pure c_bind_dh
+      pure (CSucc c_bind_kt)
+
+mkNode isZ x_tf =
+  scrut_cy <- do
+    var_cz <- do
+      pure isZ
+    var_da <- do
+      pure x_tf
+    var_kk <- do
+      pure var_cz
+    var_kl <- do
+      pure var_da
+    store (Fap var_kk var_kl)
+  scrut_km <- do
+    pure scrut_cy
+  z_tg <- eval $ scrut_km
+  case z_tg of
+    (CTrue) ->
+      pure (CNone)
+    (CFalse) ->
+      c_bind_db <- do
+        pure x_tf
+      c_bind_kn <- do
+        pure c_bind_db
+      pure (CVal c_bind_kn)
+
+reduceTree n1_tm n2_tl n3_tk n4_tj =
+  c_bind <- do
+    pure n1_tm
+  c_bind_cv <- do
+    pure n2_tl
+  c_bind_cw <- do
+    pure n3_tk
+  c_bind_cx <- do
+    pure n4_tj
+  c_bind_kg <- do
+    pure c_bind
+  c_bind_kh <- do
+    pure c_bind_cv
+  c_bind_ki <- do
+    pure c_bind_cw
+  c_bind_kj <- do
+    pure c_bind_cx
+  pure (CNode c_bind_kg c_bind_kh c_bind_ki c_bind_kj)
+
+mul x_tw y_tv =
+  scrut_cm <- do
+    pure x_tw
+  scrut_jx <- do
+    pure scrut_cm
+  z_tx <- eval $ scrut_jx
+  case z_tx of
+    (CZero) ->
+      pure (CZero)
+    (CSucc x_c) ->
+      var_cn <- do
+        var_co <- do
+          store (P2plus)
+        var_cp <- do
+          pure y_tv
+        var_jy <- do
+          pure var_co
+        var_jz <- do
+          pure var_cp
+        store (Fap var_jy var_jz)
+      var_cq <- do
+        var_cr <- do
+          var_cs <- do
+            store (P2mul)
+          var_ct <- do
+            pure x_c
+          var_ka <- do
+            pure var_cs
+          var_kb <- do
+            pure var_ct
+          store (Fap var_ka var_kb)
+        var_cu <- do
+          pure y_tv
+        var_kc <- do
+          pure var_cr
+        var_kd <- do
+          pure var_cu
+        store (Fap var_kc var_kd)
+      var_ke <- do
+        pure var_cn
+      var_kf <- do
+        pure var_cq
+      ap $ var_ke var_kf
+
+mAdd isZ_ty g m1 m2 =
+  scrut_an <- do
+    pure m1
+  scrut_hy <- do
+    pure scrut_an
+  z_tz <- eval $ scrut_hy
+  case z_tz of
+    (CError) ->
+      pure (CError)
+    (CNone) ->
+      ret_ua <- eval $ m2
+      pure ret_ua
+    (CVal v1) ->
+      scrut_ao <- do
+        pure m2
+      scrut_hz <- do
+        pure scrut_ao
+      z_ub <- eval $ scrut_hz
+      case z_ub of
+        (CError) ->
+          pure (CError)
+        (CNone) ->
+          ret_uc <- eval $ m1
+          pure ret_uc
+        (CVal v_d) ->
+          var_ap <- do
+            var_aq <- do
+              store (P2mkNode)
+            var_ar <- do
+              pure isZ_ty
+            var_ia <- do
+              pure var_aq
+            var_ib <- do
+              pure var_ar
+            store (Fap var_ia var_ib)
+          var_as <- do
+            var_at <- do
+              var_au <- do
+                pure g
+              var_av <- do
+                pure v1
+              var_ic <- do
+                pure var_au
+              var_id <- do
+                pure var_av
+              store (Fap var_ic var_id)
+            var_aw <- do
+              pure v_d
+            var_ie <- do
+              pure var_at
+            var_if <- do
+              pure var_aw
+            store (Fap var_ie var_if)
+          var_ig <- do
+            pure var_ap
+          var_ih <- do
+            pure var_as
+          ap $ var_ig var_ih
+        (CNode t1 t2 t3 t4) ->
+          pure (CError)
+    (CNode q1_j q2_k q3 q4) ->
+      scrut_ax <- do
+        pure m2
+      scrut_ii <- do
+        pure scrut_ax
+      z_ud <- eval $ scrut_ii
+      case z_ud of
+        (CError) ->
+          pure (CError)
+        (CNone) ->
+          ret_ue <- eval $ m1
+          pure ret_ue
+        (CVal v_e) ->
+          pure (CError)
+        (CNode t1_f t2_g t3_h t4_i) ->
+          var_ay <- do
+            var_az <- do
+              var_ba <- do
+                var_bb <- do
+                  store (P4reduceTree)
+                var_bc <- do
+                  var_bd <- do
+                    var_be <- do
+                      var_bf <- do
+                        var_bg <- do
+                          store (P4mAdd)
+                        var_bh <- do
+                          pure isZ_ty
+                        var_ij <- do
+                          pure var_bg
+                        var_ik <- do
+                          pure var_bh
+                        store (Fap var_ij var_ik)
+                      var_bi <- do
+                        pure g
+                      var_il <- do
+                        pure var_bf
+                      var_im <- do
+                        pure var_bi
+                      store (Fap var_il var_im)
+                    var_bj <- do
+                      pure q1_j
+                    var_in <- do
+                      pure var_be
+                    var_io <- do
+                      pure var_bj
+                    store (Fap var_in var_io)
+                  var_bk <- do
+                    pure t1_f
+                  var_ip <- do
+                    pure var_bd
+                  var_iq <- do
+                    pure var_bk
+                  store (Fap var_ip var_iq)
+                var_ir <- do
+                  pure var_bb
+                var_is <- do
+                  pure var_bc
+                store (Fap var_ir var_is)
+              var_bl <- do
+                var_bm <- do
+                  var_bn <- do
+                    var_bo <- do
+                      var_bp <- do
+                        store (P4mAdd)
+                      var_bq <- do
+                        pure isZ_ty
+                      var_it <- do
+                        pure var_bp
+                      var_iu <- do
+                        pure var_bq
+                      store (Fap var_it var_iu)
+                    var_br <- do
+                      pure g
+                    var_iv <- do
+                      pure var_bo
+                    var_iw <- do
+                      pure var_br
+                    store (Fap var_iv var_iw)
+                  var_bs <- do
+                    pure q2_k
+                  var_ix <- do
+                    pure var_bn
+                  var_iy <- do
+                    pure var_bs
+                  store (Fap var_ix var_iy)
+                var_bt <- do
+                  pure t2_g
+                var_iz <- do
+                  pure var_bm
+                var_ja <- do
+                  pure var_bt
+                store (Fap var_iz var_ja)
+              var_jb <- do
+                pure var_ba
+              var_jc <- do
+                pure var_bl
+              store (Fap var_jb var_jc)
+            var_bu <- do
+              var_bv <- do
+                var_bw <- do
+                  var_bx <- do
+                    var_by <- do
+                      store (P4mAdd)
+                    var_bz <- do
+                      pure isZ_ty
+                    var_jd <- do
+                      pure var_by
+                    var_je <- do
+                      pure var_bz
+                    store (Fap var_jd var_je)
+                  var_ca <- do
+                    pure g
+                  var_jf <- do
+                    pure var_bx
+                  var_jg <- do
+                    pure var_ca
+                  store (Fap var_jf var_jg)
+                var_cb <- do
+                  pure q3
+                var_jh <- do
+                  pure var_bw
+                var_ji <- do
+                  pure var_cb
+                store (Fap var_jh var_ji)
+              var_cc <- do
+                pure t3_h
+              var_jj <- do
+                pure var_bv
+              var_jk <- do
+                pure var_cc
+              store (Fap var_jj var_jk)
+            var_jl <- do
+              pure var_az
+            var_jm <- do
+              pure var_bu
+            store (Fap var_jl var_jm)
+          var_cd <- do
+            var_ce <- do
+              var_cf <- do
+                var_cg <- do
+                  var_ch <- do
+                    store (P4mAdd)
+                  var_ci <- do
+                    pure isZ_ty
+                  var_jn <- do
+                    pure var_ch
+                  var_jo <- do
+                    pure var_ci
+                  store (Fap var_jn var_jo)
+                var_cj <- do
+                  pure g
+                var_jp <- do
+                  pure var_cg
+                var_jq <- do
+                  pure var_cj
+                store (Fap var_jp var_jq)
+              var_ck <- do
+                pure q4
+              var_jr <- do
+                pure var_cf
+              var_js <- do
+                pure var_ck
+              store (Fap var_jr var_js)
+            var_cl <- do
+              pure t4_i
+            var_jt <- do
+              pure var_ce
+            var_ju <- do
+              pure var_cl
+            store (Fap var_jt var_ju)
+          var_jv <- do
+            pure var_ay
+          var_jw <- do
+            pure var_cd
+          ap $ var_jv var_jw
+
+fold f_ug s m_uf =
+  scrut <- do
+    pure m_uf
+  scrut_gv <- do
+    pure scrut
+  z_uh <- eval $ scrut_gv
+  case z_uh of
+    (CNone) ->
+      ret_ui <- eval $ s
+      pure ret_ui
+    (CError) ->
+      ret_uj <- eval $ s
+      pure ret_uj
+    (CVal v_l) ->
+      var <- do
+        var_m <- do
+          pure f_ug
+        var_n <- do
+          pure s
+        var_gw <- do
+          pure var_m
+        var_gx <- do
+          pure var_n
+        store (Fap var_gw var_gx)
+      var_o <- do
+        pure v_l
+      var_gy <- do
+        pure var
+      var_gz <- do
+        pure var_o
+      ap $ var_gy var_gz
+    (CNode n1 n2 n3 n4) ->
+      var_p <- do
+        var_q <- do
+          var_r <- do
+            store (P3fold)
+          var_s <- do
+            pure f_ug
+          var_ha <- do
+            pure var_r
+          var_hb <- do
+            pure var_s
+          store (Fap var_ha var_hb)
+        var_t <- do
+          var_u <- do
+            var_v <- do
+              var_w <- do
+                store (P3fold)
+              var_x <- do
+                pure f_ug
+              var_hc <- do
+                pure var_w
+              var_hd <- do
+                pure var_x
+              store (Fap var_hc var_hd)
+            var_y <- do
+              var_z <- do
+                var_aa <- do
+                  var_ab <- do
+                    store (P3fold)
+                  var_ac <- do
+                    pure f_ug
+                  var_he <- do
+                    pure var_ab
+                  var_hf <- do
+                    pure var_ac
+                  store (Fap var_he var_hf)
+                var_ad <- do
+                  var_ae <- do
+                    var_af <- do
+                      var_ag <- do
+                        store (P3fold)
+                      var_ah <- do
+                        pure f_ug
+                      var_hg <- do
+                        pure var_ag
+                      var_hh <- do
+                        pure var_ah
+                      store (Fap var_hg var_hh)
+                    var_ai <- do
+                      pure s
+                    var_hi <- do
+                      pure var_af
+                    var_hj <- do
+                      pure var_ai
+                    store (Fap var_hi var_hj)
+                  var_aj <- do
+                    pure n1
+                  var_hk <- do
+                    pure var_ae
+                  var_hl <- do
+                    pure var_aj
+                  store (Fap var_hk var_hl)
+                var_hm <- do
+                  pure var_aa
+                var_hn <- do
+                  pure var_ad
+                store (Fap var_hm var_hn)
+              var_ak <- do
+                pure n2
+              var_ho <- do
+                pure var_z
+              var_hp <- do
+                pure var_ak
+              store (Fap var_ho var_hp)
+            var_hq <- do
+              pure var_v
+            var_hr <- do
+              pure var_y
+            store (Fap var_hq var_hr)
+          var_al <- do
+            pure n3
+          var_hs <- do
+            pure var_u
+          var_ht <- do
+            pure var_al
+          store (Fap var_hs var_ht)
+        var_hu <- do
+          pure var_q
+        var_hv <- do
+          pure var_t
+        store (Fap var_hu var_hv)
+      var_am <- do
+        pure n4
+      var_hw <- do
+        pure var_p
+      var_hx <- do
+        pure var_am
+      ap $ var_hw var_hx
+
+apply f' a'' =
+  case f' of
+    (P2ap) ->
+      pure (P1ap a'')
+    (P1ap pat_xa) ->
+      ap $ pat_xa a''
+    (P2fun) ->
+      pure (P1fun a'')
+    (P1fun pat_xd) ->
+      fun $ pat_xd a''
+    (P1fun_gv) ->
+      fun_gv $ a''
+    (P2eqNat) ->
+      pure (P1eqNat a'')
+    (P1eqNat pat_xh) ->
+      eqNat $ pat_xh a''
+    (P2plus) ->
+      pure (P1plus a'')
+    (P1plus pat_xk) ->
+      plus $ pat_xk a''
+    (P2mkNode) ->
+      pure (P1mkNode a'')
+    (P1mkNode pat_xn) ->
+      mkNode $ pat_xn a''
+    (P4reduceTree) ->
+      pure (P3reduceTree a'')
+    (P3reduceTree pat_xq) ->
+      pure (P2reduceTree pat_xq a'')
+    (P2reduceTree pat_xt pat_xs) ->
+      pure (P1reduceTree pat_xt pat_xs a'')
+    (P1reduceTree pat_xx pat_xw pat_xv) ->
+      reduceTree $ pat_xx pat_xw pat_xv a''
+    (P2mul) ->
+      pure (P1mul a'')
+    (P1mul pat_ya) ->
+      mul $ pat_ya a''
+    (P4mAdd) ->
+      pure (P3mAdd a'')
+    (P3mAdd pat_yd) ->
+      pure (P2mAdd pat_yd a'')
+    (P2mAdd pat_yg pat_yf) ->
+      pure (P1mAdd pat_yg pat_yf a'')
+    (P1mAdd pat_yk pat_yj pat_yi) ->
+      mAdd $ pat_yk pat_yj pat_yi a''
+    (P3fold) ->
+      pure (P2fold a'')
+    (P2fold pat_yn) ->
+      pure (P1fold pat_yn a'')
+    (P1fold pat_yq pat_yp) ->
+      fold $ pat_yq pat_yp a''
+    (CError) ->
+      pure (CError)
+    (CFalse) ->
+      pure (CFalse)
+    (CNode c_bind_kj_tq c_bind_ki_tp c_bind_kh_to c_bind_kg_tn) ->
+      pure (CNode c_bind_kj_tq c_bind_ki_tp c_bind_kh_to c_bind_kg_tn)
+    (CNone) ->
+      pure (CNone)
+    (CSucc c_bind_kt_td) ->
+      pure (CSucc c_bind_kt_td)
+    (CTrue) ->
+      pure (CTrue)
+    (CVal c_bind_kn_th) ->
+      pure (CVal c_bind_kn_th)
+    (CZero) ->
+      pure (CZero)
+
+eval q =
+  v <- fetch q
+  w <- case v of
+    (Fap pat_uk pat) ->
+      ap $ pat_uk pat
+    (P2ap) ->
+      pure v
+    (P1ap pat_um) ->
+      pure v
+    (Ffun pat_uo pat_un) ->
+      fun $ pat_uo pat_un
+    (P2fun) ->
+      pure v
+    (P1fun pat_ur) ->
+      pure v
+    (Ffun_gv pat_us) ->
+      fun_gv $ pat_us
+    (P1fun_gv) ->
+      pure v
+    (Fmain) ->
+      main $
+    (Fq1) ->
+      q1 $
+    (Fq2) ->
+      q2 $
+    (FeqNat pat_uv pat_uu) ->
+      eqNat $ pat_uv pat_uu
+    (P2eqNat) ->
+      pure v
+    (P1eqNat pat_uy) ->
+      pure v
+    (Fplus pat_va pat_uz) ->
+      plus $ pat_va pat_uz
+    (P2plus) ->
+      pure v
+    (P1plus pat_vd) ->
+      pure v
+    (FmkNode pat_vf pat_ve) ->
+      mkNode $ pat_vf pat_ve
+    (P2mkNode) ->
+      pure v
+    (P1mkNode pat_vi) ->
+      pure v
+    (FreduceTree pat_vm pat_vl pat_vk pat_vj) ->
+      reduceTree $ pat_vm pat_vl pat_vk pat_vj
+    (P4reduceTree) ->
+      pure v
+    (P3reduceTree pat_vp) ->
+      pure v
+    (P2reduceTree pat_vs pat_vr) ->
+      pure v
+    (P1reduceTree pat_vw pat_vv pat_vu) ->
+      pure v
+    (Fmul pat_vy pat_vx) ->
+      mul $ pat_vy pat_vx
+    (P2mul) ->
+      pure v
+    (P1mul pat_wb) ->
+      pure v
+    (FmAdd pat_wf pat_we pat_wd pat_wc) ->
+      mAdd $ pat_wf pat_we pat_wd pat_wc
+    (P4mAdd) ->
+      pure v
+    (P3mAdd pat_wi) ->
+      pure v
+    (P2mAdd pat_wl pat_wk) ->
+      pure v
+    (P1mAdd pat_wp pat_wo pat_wn) ->
+      pure v
+    (Ffold pat_ws pat_wr pat_wq) ->
+      fold $ pat_ws pat_wr pat_wq
+    (P3fold) ->
+      pure v
+    (P2fold pat_wv) ->
+      pure v
+    (P1fold pat_wy pat_wx) ->
+      pure v
+    (CError) ->
+      pure (CError)
+    (CFalse) ->
+      pure (CFalse)
+    (CNode c_bind_kg_tn_tu c_bind_kh_to_tt c_bind_ki_tp_ts c_bind_kj_tq_tr) ->
+      pure (CNode c_bind_kg_tn_tu c_bind_kh_to_tt c_bind_ki_tp_ts c_bind_kj_tq_tr)
+    (CNone) ->
+      pure (CNone)
+    (CSucc c_bind_kt_td_te) ->
+      pure (CSucc c_bind_kt_td_te)
+    (CTrue) ->
+      pure (CTrue)
+    (CVal c_bind_kn_th_ti) ->
+      pure (CVal c_bind_kn_th_ti)
+    (CZero) ->
+      pure (CZero)
+  update q w
+  pure w
+
+ap f a =
+  t <- eval $ f
+  apply $ t a
+

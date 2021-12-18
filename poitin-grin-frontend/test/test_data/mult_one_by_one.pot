@@ -4,9 +4,9 @@ main = let i = 1 in
             isOne (k i j);
 
 isOne x = case x of
-    Succ(y) -> case y of
+    Succ(y) -> (case y of
         Zero -> True
-        |Succ(i) -> False
+        |Succ(i) -> False)
     |Zero -> False;
 
 plus x y = case x of
