@@ -18,7 +18,7 @@ main :: IO ()
 main = hspec spec
 
 getProg path = do
-    (Just (Module ts p)) <- loadProg path [] [] [] Nothing
+    (Just p) <- loadProg path [] [] Nothing
     return p
 
 opts = defaultOpts

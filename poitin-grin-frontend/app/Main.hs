@@ -58,10 +58,10 @@ evalGrin = evalProgram  (PureReducer (EvalPlugin evalPrimOp))
 main :: IO ()
 main = do
     [path] <- getArgs
-    p <- loadProg [path] [] [] [] Nothing
+    p <- loadProg [path] [] [] Nothing
     case p of
         Nothing -> putStrLn ""
-        Just (Module ts p') -> do
+        Just (p') -> do
             let (poitin, grin) = transformP p'
             
             optGrin <- optimizeGrin grin
