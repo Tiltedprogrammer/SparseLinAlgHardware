@@ -1,0 +1,108 @@
+grinMain =
+  m <- main $
+  case m of
+    (CSucc i) ->
+        i_var <- fetch i
+        pure i_var
+
+main =
+  i <- do
+    store (CZero)
+  j <- do
+    c_bind_d <- do
+      store (CZero)
+    c_bind_o <- do
+      pure c_bind_d
+    store (CSucc c_bind_o)
+  var_e <- do
+    var_f <- do
+      store (P2plus)
+    var_g <- do
+      pure j
+    var_p <- do
+      pure var_f
+    var_q <- do
+      pure var_g
+    store (Fap var_p var_q)
+  var_h <- do
+    pure i
+  var_r <- do
+    pure var_e
+  var_s <- do
+    pure var_h
+  ap $ var_r var_s
+
+plus x y =
+  scrut <- do
+    pure x
+  scrut_i <- do
+    pure scrut
+  z <- eval $ scrut_i
+  case z of
+    (CZero) ->
+      ret <- eval $ y
+      pure ret
+    (CSucc n) ->
+      c_bind <- do
+        var <- do
+          var_a <- do
+            store (P2plus)
+          var_b <- do
+            pure n
+          var_j <- do
+            pure var_a
+          var_k <- do
+            pure var_b
+          store (Fap var_j var_k)
+        var_c <- do
+          pure y
+        var_l <- do
+          pure var
+        var_m <- do
+          pure var_c
+        ap $ var_l var_m
+      c_bind_n <- store c_bind
+      pure (CSucc c_bind_n)
+
+apply f' a'' =
+  case f' of
+    (P2ap) ->
+      pure (P1ap a'')
+    (P1ap pat_ag) ->
+      ap $ pat_ag a''
+    (P2plus) ->
+      pure (P1plus a'')
+    (P1plus pat_aj) ->
+      plus $ pat_aj a''
+    (CSucc c_bind_n_v) ->
+      pure f'
+    (CZero) ->
+      pure f'
+
+eval q =
+  v <- fetch q
+  w <- case v of
+    (Fap pat_x pat) ->
+      ap $ pat_x pat
+    (P2ap) ->
+      pure v
+    (P1ap pat_z) ->
+      pure v
+    (Fmain) ->
+      main $
+    (Fplus pat_ab pat_aa) ->
+      plus $ pat_ab pat_aa
+    (P2plus) ->
+      pure v
+    (P1plus pat_ae) ->
+      pure v
+    (CSucc c_bind_n_v_w) -> 
+      pure v
+    (CZero) ->
+      pure v
+  update q w
+  pure w
+
+ap f a =
+  t <- eval $ f
+  apply $ t a

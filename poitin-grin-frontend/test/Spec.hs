@@ -18,7 +18,7 @@ main :: IO ()
 main = hspec spec
 
 getProg path = do
-    (Just p) <- loadProg path [] [] Nothing
+    (Just (Module ts p)) <- loadProg path [] [] [] Nothing
     return p
 
 opts = defaultOpts
@@ -36,7 +36,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "zero plus zero" $ do
         p <- getProg ["test/test_data/zero_plus_zero"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -45,7 +45,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "multiply by zero" $ do
         p <- getProg ["test/test_data/zero_mult"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -53,7 +53,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "multiply by zero with lambda" $ do
         p <- getProg ["test/test_data/zero_mult_lambda"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -61,7 +61,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "multiply one by one simple" $ do
         p <- getProg ["test/test_data/mult_one_by_one"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -69,7 +69,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "multiply and get one" $ do
         p <- getProg ["test/test_data/mult_and_get_one"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -77,7 +77,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "y combinator test" $ do
         p <- getProg ["test/test_data/another_nat_test"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -85,7 +85,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "list of func" $ do
         p <- getProg ["test/test_data/list_of_funs"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -94,7 +94,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "fold with partially applied fun" $ do
         p <- getProg ["test/test_data/fold_test"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -103,7 +103,7 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "fold of mAdd" $ do
         p <- getProg ["test/test_data/linalg_test"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 
@@ -112,7 +112,40 @@ spec = describe "Poitin-to-Grin transformation"  $ do
     it "fold of mAdd 2" $ do
         p <- getProg ["test/test_data/linalg_test_2"]
 
-        let (poitin, grin) = transformP p
+        let (poitin, grin, _) = transformP p
+
+        (res, _) <- evalGrin grin
+
+        res `shouldBe` RT_ConstTagNode (G.Tag G.C (G.NM {G.unNM =T.pack "True"})) []
+    it "fib test" $ do
+        p <- getProg ["test/test_data/fib_test"]
+
+        let (poitin, grin, _) = transformP p
+
+        (res, _) <- evalGrin grin
+
+        res `shouldBe` RT_ConstTagNode (G.Tag G.C (G.NM {G.unNM =T.pack "True"})) []
+
+    it "linalg test 1" $ do
+        p <- getProg ["test/test_data/linalg_test"]
+
+        let (poitin, grin, _) = transformP p
+
+        (res, _) <- evalGrin grin
+
+        res `shouldBe` RT_ConstTagNode (G.Tag G.C (G.NM {G.unNM =T.pack "True"})) []
+    it "linalg test 2" $ do
+        p <- getProg ["test/test_data/linalg_test_2"]
+
+        let (poitin, grin, _) = transformP p
+
+        (res, _) <- evalGrin grin
+
+        res `shouldBe` RT_ConstTagNode (G.Tag G.C (G.NM {G.unNM =T.pack "True"})) []
+    it "cps fib" $ do
+        p <- getProg ["test/test_data/tail_fib"]
+
+        let (poitin, grin, _) = transformP p
 
         (res, _) <- evalGrin grin
 

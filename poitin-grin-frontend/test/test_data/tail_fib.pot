@@ -1,0 +1,30 @@
+main = let i = 6 in
+        eqNat (fib i (\x -> x)) 8;
+
+fib n k = case n of
+    Zero -> (k Zero)
+    | Succ (x) -> (case x of
+        Zero -> (k 1)
+        | Succ (y) -> (case y of
+            Zero -> (k 1)
+            | Succ (z) -> fib (minus n 1) (\x' -> fib (minus n 2) (\y' -> k (plus x' y' (\u -> u))))
+        )
+);
+
+eqNat x y = case x of
+               Zero -> (case y of
+                           Zero -> True
+                         | Succ(y) -> False)
+             | Succ(x) -> case y of
+                             Zero -> False
+                           | Succ(y) -> eqNat x y;
+
+plus x y k = case x of
+              Zero    -> k (y)
+            | Succ(x') -> plus x' y (\x'' -> k (Succ (x'')));
+
+minus x y = case y of
+               Zero -> x
+             | Succ(y) -> case x of
+                             Zero -> Zero
+                           | Succ(x) -> minus x y

@@ -1,0 +1,79 @@
+grinMain =
+    one <- store (CInt 1)
+    four <- store (CInt 4)
+    u <- store (P2upto)
+    u' <- store (Fap u one)
+    u'' <- store (Fap u' four)
+    s <- store (P1sum)
+    s' <- store (Fap s u'')
+    eval s'
+
+
+sum l = 
+    l' <- eval l
+    case l' of
+        (CNil) -> pure (CInt 0)
+        (CCons t ts) -> 
+            (CInt t') <- eval t
+            (CInt r') <- sum ts
+            s' <- _prim_int_add $ t' r'
+            pure s'
+
+upto m n = 
+    (CInt m') <- eval m
+    (CInt n') <- eval n
+    b' <- _prim_int_add $ m' n'
+    if b' then
+        pure CNil
+    else
+        x' <- _prim_int_add $ m' 1
+        t5 <- store (CInt x')
+        t6 <- store (Fupto t5 n)
+        pure (CCons m t6)
+
+ap f a =
+  t <- eval $ f
+  apply $ t a
+
+
+apply f' a'' = 
+    case f' of
+        (CInt i) ->
+            pure f'
+        (CNil) ->
+            pure f'
+        (CCons l'' ls'') ->
+            pure f'
+        (P2ap) ->
+            pure (P1ap a'')
+        (P1ap arg4) ->
+            ap $ arg4 a''
+        (P1sum) ->
+            sum $ a''
+        (P2upto) ->
+            pure (P1upto a'')
+        (P1upto arg5) ->
+            upto arg5 a''
+
+eval q =
+  v <- fetch q
+  w <- case v of
+    (Fap pat_lx pat) ->
+      ap $ pat_lx pat
+    (P2ap) ->
+      pure v
+    (P1ap pat_lz) ->
+      pure v
+    (CInt pat_lp) ->
+      pure v
+    (P1sum) ->
+      pure v
+    (Fsum arg) ->
+        sum $ arg
+    (Fupto arg1 arg2) ->
+        upto $ arg1 arg2
+    (P2upto) ->
+        pure v
+    (P1upto arg3) ->
+        pure v
+  pure w

@@ -1,0 +1,99 @@
+data List a = Cons (a, List) | Nil
+
+data QTree a = QNone | QVal(a) | QNode ((QTree a), (Qtree a), (QTree a), (QTree a))
+
+main = let ls_1 = Cons (1, (Cons (0, Cons (3, Nil)))) in
+            let ls_2 = Cons (True, (Cons (False, Cons (True, Nil)))) in
+        let mapped_ls_1 = map (\x -> case x of 
+                                        Zero -> False
+                                        |Succ(y) -> True) ls_1 in 
+            eqBoolList mapped_ls_1 ls_2;
+
+
+append xs ys = case xs of
+                  Nil -> ys
+                | Cons(x,xs) -> Cons(x,append xs ys);
+
+nrev xs = case xs of
+             Nil        -> Nil
+           | Cons(x,xs) -> append (nrev xs) Cons(x,Nil);
+
+qrev xs ys = case xs of
+                Nil        -> ys
+              | Cons(x,xs) -> qrev xs Cons(x,ys);
+
+length xs = case xs of
+               Nil        -> Zero
+             | Cons(x,xs) -> Succ(length xs);
+
+
+eqBoolList xs ys = case xs of
+                     Nil -> (case ys of
+                                Nil -> True
+                              | Cons(y,ys) -> False)
+                   | Cons(x,xs) -> case ys of
+                                      Nil -> False
+                                    | Cons(y,ys) -> and (eqBool x y) (eqBoolList xs ys);
+
+eqNatList xs ys = case xs of
+                     Nil -> (case ys of
+                                Nil -> True
+                              | Cons(y,ys) -> False)
+                   | Cons(x,xs) -> case ys of
+                                      Nil -> False
+                                    | Cons(y,ys) -> and (eqNat x y) (eqNatList xs ys);
+
+map f l =
+    case l of
+      Nil -> Nil
+      | Cons(hd, tl) -> Cons((f hd), (map f tl));
+
+fold f s l =
+    case l of 
+      Nil -> s
+      | Cons(hd, tl) -> fold f (f s hd) tl;
+
+eqNat x y = case x of
+               Zero -> (case y of
+                           Zero -> True
+                         | Succ(y) -> False)
+             | Succ(x) -> case y of
+                             Zero -> False
+                           | Succ(y) -> eqNat x y;
+
+plus x y = case x of
+              Zero    -> y
+            | Succ(x) -> Succ(plus x y);
+
+mul x y = case x of
+             Zero    -> Zero
+           | Succ(x) -> plus y (mul x y);
+
+minus x y = case y of
+               Zero -> x
+             | Succ(y) -> case x of
+                             Zero -> Zero
+                           | Succ(x) -> minus x y;
+
+and x y = case x of 
+             True -> y     
+           | False -> False;  
+        
+or x y = case x of                  
+            True -> True    
+          | False -> y;  
+
+
+implies x y = case x of              
+                 True -> y           
+               | False -> True;  
+   
+not x = case x of                     
+           True -> False               
+         | False -> True;
+
+eqBool x y = case x of                   
+                True -> y            
+              | False -> not y
+
+	                                      

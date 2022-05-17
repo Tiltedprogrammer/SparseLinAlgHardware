@@ -24,7 +24,6 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
       Transformations.Transformations
   other-modules:
       Paths_poitin_grin_frontend

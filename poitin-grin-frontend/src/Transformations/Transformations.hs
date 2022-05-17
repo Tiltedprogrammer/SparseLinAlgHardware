@@ -1,5 +1,3 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-{-# LANGUAGE FunctionalDependencies #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
@@ -26,6 +24,10 @@ import qualified Grin.Grin as G
 import qualified Data.Text as T
 
 
+-- Here we will gather the list of assumptions
+-- 1. Since the language is untyped, we assume that the only constructors defined are those which are used throughout the code
+
+
 
 runPass :: (Term -> State Env Term) -> State Env ()
 runPass pass = do
@@ -42,15 +44,15 @@ runPass pass = do
             return ()) defs
     return ()
 
-transformP :: Prog -> (Prog, G.Program)
+transformP :: Prog -> (Prog, G.Program, [Tdef])
 transformP p@(main', defs') = let
                                   supplier = [replicate k ['a'..'z'] | k <- [1..]] >>= sequence
                                   freeVars' = reserved' `Set.union` Set.fromList ("main" : map (\x@(name,(args,body)) -> name) defs')
                                   defs'' = (("main", ([], main')) : defs')
                                   env = Env {defs = defs'', freeVars = freeVars', uniqueSupplier = supplier }
 
-                                  (_, defs''') = runState (runPass uniquifyNames >> runPass variableLift >> runPass (`lambdaLift` 0) >> runPass variableLift) env
-                                  defsG = grinify defs'''
+                                  (_, defs''') = runState (runPass uniquifyNames >> runPass variableLift >> runPass (`lambdaLift` 0) >> runPass variableLift ) env
+                                  (defsG, tdefs) = grinify defs'''
 
 
                                   Just (_, main) = lookup "main" (defs defs''')
@@ -59,11 +61,27 @@ transformP p@(main', defs') = let
                                   rest = delFromAL (defs defs''') "main" in
 
 
-                                      ((main,rest), defsG)
+                                      ((main,rest), defsG, tdefs)
 
 
 reserved' :: Set.Set String
-reserved' = Set.fromList ["ap","f","a","t","eval","apply","q","v","grinMain","m","result","w"]
+reserved' = Set.fromList ["ap"
+                         ,"f"
+                         ,"a"
+                         ,"t"
+                         ,"eval"
+                         ,"apply"
+                         ,"q"
+                         ,"v"
+                         ,"grinMain"
+                         ,"m"
+                         ,"result"
+                         ,"w"
+                         ,"GrinNode"
+                         ,"GrinNodePtr"
+                         ,"Go"
+                         ,"go"]
+
 -- need to know ord of every fun (this is in defs)
 data GrinEnv = GrinEnv {
               defsG ::  [(String, ([String],Term))],
@@ -84,7 +102,7 @@ apG = G.Def (G.NM {G.unNM="ap"}) [G.NM {G.unNM="f"},G.NM {G.unNM="a"}]
 
 -- every function should return a value (Node in current implementations, since we have no primitives)
 
-grinify :: Env -> G.Program
+grinify :: Env -> (G.Program, [Tdef])
 grinify env@(Env defs freeVars uniqueSupplier) =
         let envG = GrinEnv defs freeVars uniqueSupplier Map.empty Map.empty Map.empty
             calc = mapM (\def@(name, (args, t)) -> do
@@ -116,15 +134,29 @@ grinify env@(Env defs freeVars uniqueSupplier) =
             evalGAlts' =  concat evalGAlts ++ map (\(tag, body@(args, exp)) -> G.Alt (G.NodePat tag args) exp) (Map.toList $ evalG s'')
             applyGAlts' = concat applyGAlts ++ map (\(tag, body@(args, exp)) -> G.Alt (G.NodePat tag args) exp) (Map.toList $ applyG s'')
 
-            evalG' = G.Def (G.NM {G.unNM="eval"}) [G.NM {G.unNM="q"}]     
-                        (G.EBind (G.SFetchI (G.NM {G.unNM="q"}) Nothing) 
-                                 (G.Var G.NM{G.unNM="v"}) 
-                                 (G.EBind 
+            -- this is needed for grin to dataflow generation. This tdefs will contain single GrinNode type with all the pointers.
+            -- Constructors without arguments are supplied with extra "Go" argument for consistency
+            tdefs = [
+                Data "GrinNodePtr" [] [Constr "GrinNodePtr" [Tcon "GrinNode"]]
+                , Data "GrinNode" []  (map (\x@(G.Alt cpat@(G.NodePat t args) _) ->
+                        Constr (filter (/= ' ') ((show . G.tagType) t ++ (G.nameString . G.tagName) t)) (case args of [] -> [Tcon "Go"]
+                                                                                                                      xs -> map (const $ Tcon "GrinNodePtr") args)) evalGAlts')
+                ]
+
+            evalG' = G.Def (G.NM {G.unNM="eval"}) [G.NM {G.unNM="q"}]
+                        (G.EBind (G.SFetchI (G.NM {G.unNM="q"}) Nothing)
+                                 (G.Var G.NM{G.unNM="v"})
+                                 (G.EBind
                                     (G.ECase (G.Var G.NM {G.unNM="v"}) evalGAlts')
-                                    (G.Var G.NM {G.unNM="w"}) 
-                                    (G.EBind  (G.SUpdate (G.NM {G.unNM="q"}) (G.Var (G.NM {G.unNM="w"}))) 
-                                            G.Unit 
-                                            (G.SReturn (G.Var G.NM {G.unNM="w"}))))
+
+                                    (G.Var G.NM {G.unNM="w"})
+
+                                    -- (G.EBind  (G.SUpdate (G.NM {G.unNM="q"}) (G.Var (G.NM {G.unNM="w"})))
+                                    --         G.Unit
+                                    --         (G.SReturn (G.Var G.NM {G.unNM="w"})))
+                                    (G.SReturn (G.Var G.NM {G.unNM="w"})) -- SUpdate is needed for laziness, so I omit it for now
+
+                                 )
                         )
             applyG' = G.Def (G.NM {G.unNM="apply"}) [G.NM {G.unNM="f'"}, G.NM {G.unNM="a''"}] (G.ECase (G.Var G.NM {G.unNM="f'"}) applyGAlts')
 
@@ -135,22 +167,22 @@ grinify env@(Env defs freeVars uniqueSupplier) =
             grinMainDef = G.Def (G.NM {G.unNM="grinMain"}) [] grinMainBody in
             -- add apply, ap, eval
             -- ap is straightforward, eval is for each fun and for each encountered c-tor, apply is only for funs and c-tors
-            G.Program [] (grinMainDef : result ++ [applyG', evalG', apG])
+            (G.Program [] (grinMainDef : result ++ [applyG', evalG', apG]), tdefs)
 
 
 grinifyApply :: G.Exp -> State GrinEnv [G.Alt]
-grinifyApply x@(G.Def name args body) = do
+grinifyApply x@(G.Def name args body) =
         mapM (\i -> do
-            GrinEnv {defsG, freeVarsG, uniqueSupplierG, bindingsG, evalG, applyG} <- get
-            let (name',uniqueSupplierG') = getNewName "patP_app" freeVarsG uniqueSupplierG
+    GrinEnv {defsG, freeVarsG, uniqueSupplierG, bindingsG, evalG, applyG} <- get
+    let (name',uniqueSupplierG') = getNewName "patP_app" freeVarsG uniqueSupplierG
 
-                (args'', freeVarsG'', uniqueSupplierG'') = foldl (\(acc,f,u) _ -> let (name',uniqueSupplierG') = getNewName "pat" f u in
-                                            (name' : acc, Set.insert name' f, uniqueSupplierG')) ([], Set.insert name' freeVarsG, uniqueSupplierG') [1 .. (length args - i)]
+        (args'', freeVarsG'', uniqueSupplierG'') = foldl (\(acc,f,u) _ -> let (name',uniqueSupplierG') = getNewName "pat" f u in
+                                    (name' : acc, Set.insert name' f, uniqueSupplierG')) ([], Set.insert name' freeVarsG, uniqueSupplierG') [1 .. (length args - i)]
 
-            put (GrinEnv {defsG=defsG, freeVarsG=freeVarsG'', uniqueSupplierG=uniqueSupplierG'', bindingsG=bindingsG, evalG=evalG,applyG=applyG})
-            let body = if i == 1 then G.SApp name (map (\x -> G.Var (G.NM {G.unNM=T.pack x})) args'' ++ [G.Var (G.NM {G.unNM="a''"})])
-                                   else G.SReturn (G.ConstTagNode (G.Tag (G.P (i-1)) name) (map (\x -> G.Var (G.NM {G.unNM=T.pack x})) args'' ++ [G.Var (G.NM {G.unNM="a''"})]) )
-            return (G.Alt (G.NodePat (G.Tag (G.P i) name) (map (\x -> G.NM {G.unNM=T.pack x}) args'' )) body)) (reverse [1 .. (length args)])
+    put (GrinEnv {defsG=defsG, freeVarsG=freeVarsG'', uniqueSupplierG=uniqueSupplierG'', bindingsG=bindingsG, evalG=evalG,applyG=applyG})
+    let body = if i == 1 then G.SApp name (map (\x -> G.Var (G.NM {G.unNM=T.pack x})) args'' ++ [G.Var (G.NM {G.unNM="a''"})])
+                           else G.SReturn (G.ConstTagNode (G.Tag (G.P (i-1)) name) (map (\x -> G.Var (G.NM {G.unNM=T.pack x})) args'' ++ [G.Var (G.NM {G.unNM="a''"})]) )
+    return (G.Alt (G.NodePat (G.Tag (G.P i) name) (map (\x -> G.NM {G.unNM=T.pack x}) args'' )) body)) (reverse [1 .. (length args)])
 
 
 grinifyApply _ = error "expected G.Def in apply"
@@ -165,7 +197,7 @@ grinifyEval x@(G.Def name args body) = do
         alt = G.Alt (G.NodePat (G.Tag G.F name)
                         (map (\a -> G.NM {G.unNM=T.pack  a}) args'))
                         (G.SApp name (map (\a -> G.Var $ G.NM {G.unNM=T.pack  a}) args'))
-                                 
+
                         -- (G.EBind (G.SApp name (map (\a -> G.Var $ G.NM {G.unNM=T.pack  a}) args'))
                         --          (G.Var G.NM {G.unNM=T.pack resultName})
                         --          (G.EBind (G.SUpdate (G.NM {G.unNM="q"}) (G.Var (G.NM {G.unNM = T.pack resultName}))) G.Unit (G.SReturn (G.Var (G.NM {G.unNM=T.pack resultName})))))
@@ -196,7 +228,7 @@ grinifyHelper t rule = do
 
     case t of
         Let name t1 t2 -> do
-            -- variable is always non-strict
+            -- variable is always non-strict ?
             t1' <- G.SBlock <$> grinifyHelper t1 NonStrict
             let newBindings = Map.insert 0 name (Map.mapKeys (+1) bindingsG)
 
@@ -259,10 +291,12 @@ grinifyHelper t rule = do
                 (freeApply', uniqueSupplierApply', argsApply') = foldl helper' (freeVarsG, uniqueSupplierG, []) args'
                 (freeEval', uniqueSupplierEval', argsEval') = foldl helper' (freeApply', uniqueSupplierApply', []) argsApply'
 
-                altBodyApply = G.SReturn (G.ConstTagNode conTag  (map (\x -> G.Var (G.NM {G.unNM = T.pack x})) argsApply'))
+                -- altBodyApply = G.SReturn (G.ConstTagNode conTag  (map (\x -> G.Var (G.NM {G.unNM = T.pack x})) argsApply'))
+                altBodyApply = G.SReturn (G.Var (G.NM {G.unNM="f'"}))
                 entryApply = (map (\x -> G.NM {G.unNM=T.pack x}) argsApply', altBodyApply)
 
-                altBodyEval = G.SReturn (G.ConstTagNode conTag  (map (\x -> G.Var (G.NM {G.unNM = T.pack x})) argsEval'))
+                -- altBodyEval = G.SReturn (G.ConstTagNode conTag  (map (\x -> G.Var (G.NM {G.unNM = T.pack x})) argsEval'))
+                altBodyEval = G.SReturn (G.Var (G.NM {G.unNM="v"}))
                 entryEval = (map (\x -> G.NM {G.unNM=T.pack x}) argsEval', altBodyEval)
 
             put (GrinEnv {defsG=defsG, bindingsG=bindingsG, freeVarsG=freeEval',uniqueSupplierG=uniqueSupplierEval',evalG=  Map.insert conTag entryEval evalG,applyG=Map.insert conTag entryApply applyG})
@@ -307,7 +341,7 @@ grinifyHelper t rule = do
         -- pay attention to the case when fun has no arguments but then it cannot be inside apply
         Fun name -> do
             let (Just (args, _)) = lookup name defsG
-            if length args == 0 then
+            if null args then
                case rule of
                     NonStrict -> return (G.SStore (G.ConstTagNode (G.Tag G.F (G.NM {G.unNM =T.pack name})) []))
                     Strict -> return (G.SReturn (G.ConstTagNode (G.Tag G.F (G.NM {G.unNM =T.pack name})) []))
@@ -351,7 +385,7 @@ uniquifyNames t = do
         Lambda s t' -> do
             t'' <- uniquifyNames t'
             return (Lambda s t'')
-        Con s args@(x:xs) -> do
+        Con s args@(x:xs) ->
             Con s <$> mapM uniquifyNames args
         Apply t1 t2 -> do
             t1' <- uniquifyNames t1
@@ -528,7 +562,7 @@ lambdaLift t depth = do
             let  newDef = (vars, body'')
                  (name', uniqueSupplier') = getNewName "fun" freeVars uniqueSupplier
 
-            put Env {defs=addToAL defs name' newDef, freeVars=Set.insert name' freeVars, uniqueSupplier=uniqueSupplier}
+            put Env {defs=addToAL defs name' newDef, freeVars=Set.insert name' freeVars, uniqueSupplier=uniqueSupplier'}
 
             let t' = foldr (\i acc -> Apply acc (Bound i)) (Fun name') bindings
             return ( shift (-1) t')
@@ -545,14 +579,17 @@ lambdaLift t depth = do
             t1' <- lambdaLift t1 depth
             t2' <- lambdaLift t2 depth
             return (Apply t1' t2')
-
-        x -> return x
+        (Case scrut alts) -> do
+            alts' <- mapM (\x@(con, args, t) -> lambdaLift t depth) alts
+            return (Case scrut (zipWith (\t r@(con, args, _) -> (con, args, t)) alts' alts))
+        x -> return x 
+            
 
 lambdaLiftHelper :: Term -> State Env' Term
 lambdaLiftHelper t = do
     Env' {globDepth, curDepth, frees} <- get
     case t of
-        (Bound i) -> if (i - curDepth) > 0 then do
+        (Bound i) -> if i - curDepth > 0 then do
                         put (Env' {globDepth=globDepth, curDepth=curDepth,frees = Set.insert (i - curDepth) frees})
                         return (Bound i)
                         else return (Bound i)

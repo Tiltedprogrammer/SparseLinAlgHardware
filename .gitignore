@@ -33,3 +33,5 @@ stack*.yaml.lock
 inputs/
 .grin-output
 .output
+grin-cps/
+grin-dataflow/
