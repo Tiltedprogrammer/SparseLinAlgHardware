@@ -50,21 +50,9 @@ steps = [ InlineEval
   , LateInlining
   ]
 
-    --   [ SimpleDeadVariableElimination
-    --   , CommonSubExpressionElimination
-    --   , NonSharedElimination
-    --   ]
-
-    --               [ DeadDataElimination
-    --               , DeadFunctionElimination
-    --               , DeadParameterElimination
-    --               , DeadVariableElimination
-    --               ]
-
 
 optimizeGrin prog = optimizeWith opts prog [] steps [SaveGrin (Rel $ _poOutputDir opts)]
 evalGrin = evalProgram  (PureReducer (EvalPlugin evalPrimOp))
--- evalGrin prog = pipeline opts Nothing  prog [] >>= evalProgram  (PureReducer (EvalPlugin evalPrimOp))
 
 
 main :: IO ()
@@ -74,13 +62,10 @@ main = do
     case p of
         Nothing -> putStrLn ""
         Just (Module ts p') -> do
-            let (poitin, grin, _) = transformP p'
+            let (poitin, grin) = transformP p'
             
             optGrin <- optimizeGrin grin
             (res, _) <- evalGrin optGrin
-            -- printGrin optGrin
             printGrin grin
             print res
-            -- print ts
-            -- putStr $ showProg poitin
 

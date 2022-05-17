@@ -44,7 +44,7 @@ runPass pass = do
             return ()) defs
     return ()
 
-transformP :: Prog -> (Prog, G.Program, [Tdef])
+transformP :: Prog -> (Prog, G.Program)
 transformP p@(main', defs') = let
                                   supplier = [replicate k ['a'..'z'] | k <- [1..]] >>= sequence
                                   freeVars' = reserved' `Set.union` Set.fromList ("main" : map (\x@(name,(args,body)) -> name) defs')
@@ -52,7 +52,7 @@ transformP p@(main', defs') = let
                                   env = Env {defs = defs'', freeVars = freeVars', uniqueSupplier = supplier }
 
                                   (_, defs''') = runState (runPass uniquifyNames >> runPass variableLift >> runPass (`lambdaLift` 0) >> runPass variableLift ) env
-                                  (defsG, tdefs) = grinify defs'''
+                                  (defsG) = grinify defs'''
 
 
                                   Just (_, main) = lookup "main" (defs defs''')
@@ -61,7 +61,7 @@ transformP p@(main', defs') = let
                                   rest = delFromAL (defs defs''') "main" in
 
 
-                                      ((main,rest), defsG, tdefs)
+                                      ((main,rest), defsG)
 
 
 reserved' :: Set.Set String
@@ -102,7 +102,7 @@ apG = G.Def (G.NM {G.unNM="ap"}) [G.NM {G.unNM="f"},G.NM {G.unNM="a"}]
 
 -- every function should return a value (Node in current implementations, since we have no primitives)
 
-grinify :: Env -> (G.Program, [Tdef])
+grinify :: Env -> (G.Program)
 grinify env@(Env defs freeVars uniqueSupplier) =
         let envG = GrinEnv defs freeVars uniqueSupplier Map.empty Map.empty Map.empty
             calc = mapM (\def@(name, (args, t)) -> do
@@ -167,7 +167,7 @@ grinify env@(Env defs freeVars uniqueSupplier) =
             grinMainDef = G.Def (G.NM {G.unNM="grinMain"}) [] grinMainBody in
             -- add apply, ap, eval
             -- ap is straightforward, eval is for each fun and for each encountered c-tor, apply is only for funs and c-tors
-            (G.Program [] (grinMainDef : result ++ [applyG', evalG', apG]), tdefs)
+            (G.Program [] (grinMainDef : result ++ [applyG', evalG', apG]))
 
 
 grinifyApply :: G.Exp -> State GrinEnv [G.Alt]
