@@ -136,12 +136,12 @@ grinify env@(Env defs freeVars uniqueSupplier) =
 
             -- this is needed for grin to dataflow generation. This tdefs will contain single GrinNode type with all the pointers.
             -- Constructors without arguments are supplied with extra "Go" argument for consistency
-            tdefs = [
-                Data "GrinNodePtr" [] [Constr "GrinNodePtr" [Tcon "GrinNode"]]
-                , Data "GrinNode" []  (map (\x@(G.Alt cpat@(G.NodePat t args) _) ->
-                        Constr (filter (/= ' ') ((show . G.tagType) t ++ (G.nameString . G.tagName) t)) (case args of [] -> [Tcon "Go"]
-                                                                                                                      xs -> map (const $ Tcon "GrinNodePtr") args)) evalGAlts')
-                ]
+            -- tdefs = [
+            --     Data "GrinNodePtr" [] [Constr "GrinNodePtr" [Tcon "GrinNode"]]
+            --     , Data "GrinNode" []  (map (\x@(G.Alt cpat@(G.NodePat t args) _) ->
+            --             Constr (filter (/= ' ') ((show . G.tagType) t ++ (G.nameString . G.tagName) t)) (case args of [] -> [Tcon "Go"]
+            --                                                                                                           xs -> map (const $ Tcon "GrinNodePtr") args)) evalGAlts')
+            --     ]
 
             evalG' = G.Def (G.NM {G.unNM="eval"}) [G.NM {G.unNM="q"}]
                         (G.EBind (G.SFetchI (G.NM {G.unNM="q"}) Nothing)
